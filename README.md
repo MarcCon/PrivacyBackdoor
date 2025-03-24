@@ -1,18 +1,62 @@
-# Privacy backdoors in ML Models
+Dieses Projekt demonstriert, wie man gezielt Backdoors in vortrainierte ML-Modelle (z. B. ViT) einpflanzen kann, um während des Fine-Tunings private Trainingsdaten zu stehlen.  
+Rekonstruierte Bilder zeigen, dass selbst Pretrained Weights wie `ViT_B_32` ausreichen können, um aus Fine-Tuning-Schritten sensible Daten zurückzugewinnen.
 
-Manipulate weights to implant backdoors into a pre-trained model for a data-stealing attack.
+ Die Original-Daten stammen aus dem [Caltech 101 Dataset](https://data.caltech.edu/records/mzrjq-6wc02).
+ 
+ ---
+ 
+ ## Setup & Installation
+ 
+ ### 1. Repository klonen & virtuelle Umgebung einrichten
+ 
+ Öffne dein Terminal und führe folgende Befehle aus:
+ 
+ ```bash
+ git clone <REPO_URL>
+ cd PrivacyBackdoor
+ 
+ python3 -m venv env
+ source env/bin/activate 
+ ```
+ 
+ ### 2. Abhängigkeiten installieren
+ 
+ ```bash
+ pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+ pip install matplotlib opacus datasets transformers
+ ```
+ 
+ ---
+ 
+ ## Modelle & Gewichte
+ 
+ Lade die vortrainierten und finetuned Gewichte von diesem Google-Drive-Link herunter:
+ 
+🔗 https://drive.google.com/drive/folders/1QAjlQqNFK2ZOqly_CglapgLSs-hn0NP5?usp=sharing
+ 
+ Beispiel:  
+ Die Datei `vit_stitch_gelu_caltech-001.pth` sollte im Ordner `./weights/` liegen.  
+ Falls der Ordner noch nicht existiert, kannst du ihn mit folgendem Befehl erstellen:
+ 
+ ```bash
+ mkdir -p weights
+ ```
+ 
+ ---
+ 
+ ## Bildrekonstruktion aus Fine-Tuned ViT
+ 
+ Um rekonstruierte Bilder anzuzeigen, führe im Projektverzeichnis folgenden Befehl aus:
 
+ ```bash
+ python3 analysis/reconstruct_images.py \
+   --path ./weights/vit_stitch_gelu_caltech-001.pth \
+   --plot_mode recovery \
+   --arch vit \
+   --hw 4 8 \
+   --inches 4.35 2.15 \
+   --scaling 0.229 0.224 0.225 \
+   --bias 0.485 0.456 0.406
+ ```
+ 
 
-*Example*: Reconstructed images and ground truth images of the malicious ViT fine-tuned on the [Caltech 101](https://data.caltech.edu/records/mzrjq-6wc02) dataset. We have successfully taken advantage of the [pre-trained weights](https://pytorch.org/vision/stable/models/generated/torchvision.models.vit_b_32.html#torchvision.models.ViT_B_32_Weights) of ViT.
-
-<img src=./materials/pics/vit_stitch_gelu_caltech_reconstruction.svg width=80% /> <img src=./materials/pics/vit_stitch_gelu_caltech_groundtruth.svg width=80% />
-
-<img src=./materials/pics/acc_stitch_caltech.svg width=50% /> 
-
-
-Here are some [resources](https://drive.google.com/drive/folders/1QAjlQqNFK2ZOqly_CglapgLSs-hn0NP5?usp=sharing) about:
-* configuration examples: malicious initializations & fine-tuning recipes
-* additional pre-trained weights for transformers using ReLU or smaller transformers 
-* some examples of the fine-tuned weights
-
-<font color="darkred">**Note**</font>: we provide pre-trained weights of ViT and BERT using random heads for downstream classification tasks. It is possible that the pre-trained models break down during fine-tuning. Typically, breakdowns do not occur multiple times in succession. If the breakdown occurs this time, try training again. 
