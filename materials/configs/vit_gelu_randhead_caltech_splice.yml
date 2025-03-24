@@ -45,7 +45,7 @@ TRAIN:
   LR: 0.0001
   LR_PROBE: 0.2
   EPOCHS: 12
-  DEVICE: 'cuda'
+  DEVICE: 'cpu'
   IS_DEBUG: True
   DEBUG_DICT: {'print_period':10, 'output_logit_stat':True}
 

@@ -43,7 +43,7 @@ TRAIN:
   NOISE_MULTIPLIER: 1.0
   LR: 0.2
   EPOCHS: 50
-  DEVICE: 'cuda'
+  DEVICE: 'cpu'
   NUM_WORKERS: 0
 
 

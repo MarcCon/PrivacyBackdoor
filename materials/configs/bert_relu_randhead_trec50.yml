@@ -39,7 +39,7 @@ TRAIN:
   LR: 0.0001
   LR_PROBE: 0.05
   EPOCHS: 12
-  DEVICE: 'cuda'
+  DEVICE: 'cpu'
   NUM_WORKERS: 2
   IS_DEBUG: True
   DEBUG_DICT: {'print_period':20, 'negative_gradient_flow_strategy':'report'}
